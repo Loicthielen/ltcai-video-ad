@@ -1,0 +1,2 @@
+# Placer ici bg-music.mp3 pour activer la musique de fond
+# (puis mettre brand.enableBackgroundMusic = true dans src/config/brand.ts)

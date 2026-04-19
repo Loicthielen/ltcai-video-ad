@@ -1,0 +1,26 @@
+{
+  "name": "ltcai-video-ad",
+  "version": "1.0.0",
+  "description": "Publicité Meta Ads 15s pour LTC AI (ltcai.be) — audit IA gratuit pour PME",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render LTCAi-Feed-4x5 out/ltcai-audit-15s.mp4 --codec=h264",
+    "render:reels": "remotion render LTCAi-Reels-9x16 out/ltcai-audit-15s-reels.mp4 --codec=h264",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.340",
+    "@remotion/cli": "4.0.340",
+    "@remotion/google-fonts": "4.0.340",
+    "@remotion/renderer": "4.0.340",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.340"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "@types/web": "0.0.166",
+    "typescript": "5.8.2"
+  }
+}

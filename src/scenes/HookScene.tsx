@@ -2,11 +2,11 @@ import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {brand} from '../config/brand';
 import {AnimatedText} from '../components/AnimatedText';
-import {BrandLogo} from '../components/BrandLogo';
 
 /**
  * [0-4s] HOOK — Problème nommé
  * Fond blanc cassé. Titre centré, puis sous-titre d'appui.
+ * Le logo permanent est affiché en coin sup. droit par Explainer45s.
  */
 export const HookScene: React.FC = () => {
   return (
@@ -18,20 +18,6 @@ export const HookScene: React.FC = () => {
         padding: 80,
       }}
     >
-      {/* Logo discret en haut */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 70,
-          left: 0,
-          right: 0,
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <BrandLogo size={48} delay={0} />
-      </div>
-
       <div
         style={{
           display: 'flex',

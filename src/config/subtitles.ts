@@ -25,11 +25,12 @@ const sec = (s: number) => Math.round((s / brand.speedFactor) * FPS);
 
 export const subtitles: SubtitleMap = {
   fr: [
-    // [0-4s] HOOK
+    // [0-4s] HOOK — le titre est affiché en grand à l'écran par HookScene ;
+    // le sous-titre porte la ligne d'appui narrative (pas de doublon).
     {
       scene: 'hook',
-      text: 'Vos tâches répétitives vous épuisent ?',
-      startFrame: sec(0.4),
+      text: "L'IA peut s'en occuper. Voici comment.",
+      startFrame: sec(1.8),
       endFrame: sec(4),
     },
 
@@ -65,12 +66,11 @@ export const subtitles: SubtitleMap = {
       endFrame: sec(33),
     },
 
-    // [33-39s] FOLLOW-UP
-    // Note : le tagline "L'IA, simplement." est affiché en grand texte
-    // à l'écran par FollowUpScene — pas besoin de le dupliquer en sous-titre.
+    // [33-39s] FOLLOW-UP — le tagline "L'IA, simplement." est à l'écran
+    // via FollowUpScene. Sous-titre distinct (pas de doublon avec l'écran).
     {
       scene: 'followup',
-      text: 'Et on reste à vos côtés pour faire évoluer vos outils.',
+      text: 'Pour faire évoluer vos outils dans le temps.',
       startFrame: sec(33.4),
       endFrame: sec(37),
     },
@@ -88,8 +88,8 @@ export const subtitles: SubtitleMap = {
   nl: [
     {
       scene: 'hook',
-      text: 'Uitgeput door repetitieve taken?',
-      startFrame: sec(0.4),
+      text: 'AI kan het overnemen. Zo werkt het.',
+      startFrame: sec(1.8),
       endFrame: sec(4),
     },
     {
@@ -119,7 +119,7 @@ export const subtitles: SubtitleMap = {
     // Tagline affiché à l'écran par FollowUpScene — pas dupliqué ici.
     {
       scene: 'followup',
-      text: 'En we blijven naast u staan om uw tools te laten evolueren.',
+      text: 'Om uw tools in de tijd te laten evolueren.',
       startFrame: sec(33.4),
       endFrame: sec(37),
     },

@@ -5,6 +5,7 @@ import {brand} from '../config/brand';
 type Props = {
   /** Délai avant apparition (frames) */
   delay?: number;
+  /** Hauteur du logo en pixels */
   size?: number;
   variant?: 'onLight' | 'onDark';
   animated?: boolean;
@@ -12,8 +13,10 @@ type Props = {
 };
 
 /**
- * Logo LTC AI — wordmark minimaliste, aux couleurs strictement LTC.
- * Bloc "LTC" gras + petite marque "AI" en accent chaleureux.
+ * Logo LTC AI — monogramme officiel (deux traits croisés + point),
+ * couleur stricte LTC. Inline SVG pour pouvoir réagir à `variant`
+ * via `currentColor`. Pour remplacer par l'asset final, éditer les
+ * chemins ci-dessous ou pointer sur `public/logo-ltc-ai.svg`.
  */
 export const BrandLogo: React.FC<Props> = ({
   delay = 0,
@@ -43,43 +46,46 @@ export const BrandLogo: React.FC<Props> = ({
 
   const scale = animated ? interpolate(s, [0, 1], [0.92, 1]) : 1;
 
-  const textColor = variant === 'onDark' ? brand.colors.cream : brand.colors.navy;
+  const color = variant === 'onDark' ? brand.colors.cream : brand.colors.navy;
 
   return (
     <div
       style={{
         display: 'inline-flex',
-        alignItems: 'baseline',
-        gap: size * 0.18,
-        fontFamily: brand.fonts.family,
-        fontWeight: brand.fonts.weights.heavy,
-        fontSize: size,
-        letterSpacing: -1,
-        color: textColor,
+        alignItems: 'center',
+        justifyContent: 'center',
+        color,
         opacity,
         transform: `scale(${scale})`,
         transformOrigin: 'center',
         ...style,
       }}
     >
-      <span>LTC</span>
-      <span
-        style={{
-          color: brand.colors.accent,
-          fontSize: size * 0.6,
-          fontWeight: brand.fonts.weights.bold,
-          letterSpacing: 0,
-          padding: `${size * 0.06}px ${size * 0.18}px`,
-          borderRadius: size * 0.18,
-          backgroundColor:
-            variant === 'onDark'
-              ? 'rgba(255, 255, 255, 0.14)'
-              : 'rgba(21, 21, 170, 0.10)',
-          lineHeight: 1,
-        }}
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 100 100"
+        fill="currentColor"
+        aria-label="LTC AI"
       >
-        AI
-      </span>
+        <rect
+          x="20"
+          y="18"
+          width="20"
+          height="72"
+          rx="10"
+          transform="rotate(-10 30 54)"
+        />
+        <rect
+          x="56"
+          y="28"
+          width="18"
+          height="62"
+          rx="9"
+          transform="rotate(14 65 59)"
+        />
+        <circle cx="80" cy="14" r="8" />
+      </svg>
     </div>
   );
 };

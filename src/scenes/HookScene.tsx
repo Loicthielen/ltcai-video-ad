@@ -39,19 +39,6 @@ export const HookScene: React.FC = () => {
           <br />
           vous épuisent&nbsp;?
         </AnimatedText>
-
-        <AnimatedText
-          delay={48}
-          duration={18}
-          size={40}
-          weight="medium"
-          color={brand.colors.neutralDark}
-          lineHeight={1.3}
-        >
-          L'IA peut s'en occuper.
-          <br />
-          Voici comment.
-        </AnimatedText>
       </div>
     </AbsoluteFill>
   );

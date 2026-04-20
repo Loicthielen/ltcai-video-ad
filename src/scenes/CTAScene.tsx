@@ -73,17 +73,6 @@ export const CTAScene: React.FC = () => {
       <AnimatedText
         delay={36}
         duration={16}
-        size={32}
-        weight="medium"
-        color={brand.colors.neutralDark}
-        align="center"
-      >
-        30 minutes. Sans engagement.
-      </AnimatedText>
-
-      <AnimatedText
-        delay={54}
-        duration={16}
         size={44}
         weight="bold"
         color={brand.colors.navy}

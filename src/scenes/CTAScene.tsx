@@ -7,7 +7,7 @@ import {
 } from 'remotion';
 import {brand} from '../config/brand';
 import {AnimatedText} from '../components/AnimatedText';
-import {BrandLogo} from '../components/BrandLogo';
+import {Logo} from '../Logo';
 
 /**
  * [39-45s] CTA FINAL
@@ -35,7 +35,7 @@ export const CTAScene: React.FC = () => {
         gap: 40,
       }}
     >
-      <BrandLogo size={84} delay={0} />
+      <Logo size={160} animate delay={0} />
 
       <AnimatedText
         delay={6}

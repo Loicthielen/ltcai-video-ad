@@ -4,13 +4,12 @@ import {
   Audio,
   Sequence,
   staticFile,
-  useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
 import {brand} from '../config/brand';
 import {Language} from '../config/subtitles';
 import {Subtitle} from '../components/Subtitle';
-import {BrandLogo} from '../components/BrandLogo';
+import {Logo} from '../Logo';
 
 import {HookScene} from '../scenes/HookScene';
 import {ProcessIntroScene} from '../scenes/ProcessIntroScene';
@@ -43,27 +42,12 @@ const s = (n: number) => Math.round((n / brand.speedFactor) * FPS);
  *  33-39s  Suivi + tagline "L'IA, simplement."
  *  39-45s  CTA final
  */
-/** Overlay logo — coin supérieur droit, permanent, variant auto selon la scène. */
-const LogoWatermark: React.FC = () => {
-  const frame = useCurrentFrame();
-  // FollowUpScene est la seule scène à fond navy (33–39 s storyboard).
-  const followUpStart = s(33);
-  const followUpEnd = s(39);
-  const onDark = frame >= followUpStart && frame < followUpEnd;
-
-  return (
-    <AbsoluteFill
-      style={{
-        justifyContent: 'flex-start',
-        alignItems: 'flex-end',
-        padding: '36px 44px',
-        pointerEvents: 'none',
-      }}
-    >
-      <BrandLogo size={44} variant={onDark ? 'onDark' : 'onLight'} animated={false} />
-    </AbsoluteFill>
-  );
-};
+/** Overlay logo — coin supérieur droit, permanent, rendu par le composant Logo. */
+const LogoWatermark: React.FC = () => (
+  <AbsoluteFill style={{pointerEvents: 'none'}}>
+    <Logo size={120} position="top-right" />
+  </AbsoluteFill>
+);
 
 export const Explainer45s: React.FC<Explainer45sProps> = ({language}) => {
   const {durationInFrames} = useVideoConfig();

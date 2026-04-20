@@ -7,7 +7,7 @@ import {
 } from 'remotion';
 import {brand} from '../config/brand';
 import {AnimatedText} from '../components/AnimatedText';
-import {BrandLogo} from '../components/BrandLogo';
+import {Logo} from '../Logo';
 
 /**
  * [33-39s] ÉTAPE 4 — SUIVI + PROMESSE
@@ -80,7 +80,7 @@ export const FollowUpScene: React.FC = () => {
           zIndex: 1,
         }}
       >
-        <BrandLogo size={120} variant="onDark" delay={4} />
+        <Logo size={180} animate delay={4} />
 
         <AnimatedText
           delay={24}

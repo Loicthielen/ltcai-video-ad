@@ -131,12 +131,13 @@ src/
 │   ├── MockupFrame.tsx           # Cadre fenêtre applicative
 │   ├── StepCard.tsx              # Carte d'étape du processus
 │   ├── UseCaseCard.tsx           # Cas d'usage + mini-mockup animé
-│   ├── BrandLogo.tsx             # Logo LTC AI (wordmark)
 │   └── Icon.tsx                  # Icônes SVG inline
-└── config/
-    ├── brand.ts                  # Palette + typo + tagline
-    ├── useCases.ts               # Array des 6 cas d'usage
-    └── subtitles.ts              # Sous-titres FR + NL
+├── config/
+│   ├── brand.ts                  # Palette + typo + tagline
+│   ├── useCases.ts               # Array des 6 cas d'usage
+│   └── subtitles.ts              # Sous-titres FR + NL
+└── Logo.tsx                      # Composant PNG officiel LTC AI
 public/
+├── ltc-logo.png                  # Logo officiel LTC AI (2576x2576)
 └── bg-music.mp3 (optionnel)
 ```

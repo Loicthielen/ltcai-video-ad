@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="currentColor">
-  <!-- LTC AI monogramme : hook (J courbé) + diagonale droite + point "i" -->
-  <g fill="none" stroke="currentColor" stroke-width="62" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 100 355 L 100 155 Q 100 90 165 90 Q 230 90 230 155 L 230 290" />
-    <path d="M 255 130 L 345 355" />
-  </g>
-  <circle cx="328" cy="72" r="36" />
-</svg>

@@ -59,10 +59,10 @@ export const UseCaseCard: React.FC<Props> = ({useCase, durationInFrames}) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 12px 36px rgba(7, 22, 48, 0.22)',
+            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.18)',
           }}
         >
-          <Icon name={useCase.icon} size={68} color={brand.colors.accent} />
+          <Icon name={useCase.icon} size={68} color={brand.colors.cream} />
         </div>
         <div
           style={{
@@ -250,7 +250,7 @@ const PdfMockup: React.FC<{progress: number}> = ({progress}) => {
             fontFamily: brand.fonts.family,
             fontWeight: brand.fonts.weights.bold,
             fontSize: 14,
-            color: brand.colors.navy,
+            color: brand.colors.cream,
             opacity: progress > 0.8 ? 1 : 0,
           }}
         >
@@ -292,7 +292,7 @@ const NotificationMockup: React.FC<{progress: number}> = ({progress}) => {
               borderRadius: 12,
               backgroundColor: brand.colors.creamSoft,
               border: `1.5px solid ${brand.colors.accent}`,
-              boxShadow: '0 4px 12px rgba(232, 169, 78, 0.15)',
+              boxShadow: '0 4px 12px rgba(21, 21, 170, 0.18)',
             }}
           >
             <div
@@ -306,7 +306,7 @@ const NotificationMockup: React.FC<{progress: number}> = ({progress}) => {
                 justifyContent: 'center',
               }}
             >
-              <Icon name="bell" size={26} color={brand.colors.navy} />
+              <Icon name="bell" size={26} color={brand.colors.cream} />
             </div>
             <div style={{flex: 1}}>
               <div
@@ -469,10 +469,8 @@ const ChatMockup: React.FC<{progress: number}> = ({progress}) => {
                   flex: 1,
                   height: 8,
                   borderRadius: 4,
-                  backgroundColor: isAi
-                    ? brand.colors.navy
-                    : brand.colors.cream,
-                  opacity: 0.6,
+                  backgroundColor: brand.colors.cream,
+                  opacity: 0.7,
                 }}
               />
             </div>
@@ -520,7 +518,7 @@ const DashboardMockup: React.FC<{progress: number}> = ({progress}) => {
           style={{
             fontFamily: brand.fonts.family,
             fontWeight: brand.fonts.weights.bold,
-            color: brand.colors.accent,
+            color: brand.colors.cream,
             fontSize: 36,
             marginTop: 4,
             opacity: progress > 0.3 ? 1 : 0,

@@ -41,7 +41,7 @@ export const RecommendationsScene: React.FC = () => {
           backgroundColor: brand.colors.navy,
         }}
       >
-        <Icon name="bulb" size={32} color={brand.colors.accent} stroke={2.6} />
+        <Icon name="bulb" size={32} color={brand.colors.cream} stroke={2.6} />
         <div
           style={{
             fontFamily: brand.fonts.family,
@@ -53,7 +53,7 @@ export const RecommendationsScene: React.FC = () => {
         >
           ÉTAPES 2 &amp; 3
         </div>
-        <Icon name="gear" size={32} color={brand.colors.accent} stroke={2.6} />
+        <Icon name="gear" size={32} color={brand.colors.cream} stroke={2.6} />
       </div>
 
       <AnimatedText
@@ -113,8 +113,8 @@ export const RecommendationsScene: React.FC = () => {
                 style={{
                   padding: '6px 14px',
                   borderRadius: 999,
-                  backgroundColor: brand.colors.accentSoft,
-                  color: brand.colors.navy,
+                  backgroundColor: brand.colors.accent,
+                  color: brand.colors.cream,
                   fontFamily: brand.fonts.family,
                   fontWeight: brand.fonts.weights.bold,
                   fontSize: 14,
@@ -185,11 +185,11 @@ export const RecommendationsScene: React.FC = () => {
                 justifyContent: 'center',
                 opacity: p,
                 transform: `scale(${0.8 + p * 0.2})`,
-                boxShadow: '0 10px 24px rgba(7, 22, 48, 0.2)',
+                boxShadow: '0 10px 24px rgba(0, 0, 0, 0.18)',
                 zIndex: 1,
               }}
             >
-              <Icon name={icon} size={44} color={brand.colors.accent} />
+              <Icon name={icon} size={44} color={brand.colors.cream} />
             </div>
           );
         })}

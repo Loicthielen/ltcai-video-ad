@@ -1,17 +1,18 @@
 import React from 'react';
-import {AbsoluteFill, Sequence} from 'remotion';
+import {AbsoluteFill, Sequence, useVideoConfig} from 'remotion';
 import {brand} from '../config/brand';
 import {useCases} from '../config/useCases';
 import {UseCaseCard} from '../components/UseCaseCard';
 
 /**
- * [22-33s] FLASH DES 6 CAS D'USAGE
- * 11 secondes / 6 cas = ~1.833s chacun = 55 frames @ 30fps.
+ * FLASH DES 6 CAS D'USAGE (équivalent 22-33s en storyboard 1x).
+ * Durée effective scalée par brand.speedFactor. Chaque cas occupe 1/N de la scène.
  */
 
-const FRAMES_PER_CASE = 55;
-
 export const UseCasesFlashScene: React.FC = () => {
+  const {durationInFrames} = useVideoConfig();
+  const framesPerCase = Math.floor(durationInFrames / useCases.length);
+
   return (
     <AbsoluteFill
       style={{
@@ -38,8 +39,8 @@ export const UseCasesFlashScene: React.FC = () => {
         {useCases.map((uc, i) => (
           <Sequence
             key={uc.id}
-            from={i * FRAMES_PER_CASE}
-            durationInFrames={FRAMES_PER_CASE}
+            from={i * framesPerCase}
+            durationInFrames={framesPerCase}
             layout="none"
           >
             <AbsoluteFill
@@ -51,7 +52,7 @@ export const UseCasesFlashScene: React.FC = () => {
             >
               <UseCaseCard
                 useCase={uc}
-                durationInFrames={FRAMES_PER_CASE}
+                durationInFrames={framesPerCase}
               />
             </AbsoluteFill>
           </Sequence>

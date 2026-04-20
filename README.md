@@ -1,4 +1,4 @@
-# LTC AI — Explainer Video 45s (Meta Ads)
+# LTC AI — Explainer Video (Meta Ads)
 
 Projet Remotion standalone : une publicité Facebook Ads (format 4:5, 1080×1350) expliquant comment **LTC AI** (ltcai.be) aide les PME francophones à intégrer l'IA dans leurs opérations.
 
@@ -8,7 +8,7 @@ Projet Remotion standalone : une publicité Facebook Ads (format 4:5, 1080×1350
 
 - **Framework** : Remotion 4.x
 - **Format** : 1080 × 1350 (4:5 vertical, Facebook Feed desktop + mobile)
-- **Durée** : 45 s @ 30 fps (1350 frames)
+- **Storyboard** : 45 s (référence) — **Durée réelle : 60 s @ 30 fps (1800 frames)** via `brand.speedFactor = 0.75` (rythme 25 % plus lent, plus lisible sur mobile)
 - **Export** : MP4, H.264, 30 fps, CRF 20 (bitrate adapté Meta 4–8 Mbps)
 - **Silent-friendly** : vidéo 100 % compréhensible sans le son. Aucune voix-off. Toute la narration passe par des sous-titres incrustés et du texte à l'écran.
 
@@ -71,7 +71,7 @@ Les 6 cas d'usage du flash (22–33 s) sont dans [`src/config/useCases.ts`](src/
 }
 ```
 
-Ajoutez ou retirez des entrées, puis adaptez `FRAMES_PER_CASE` dans `src/scenes/UseCasesFlashScene.tsx` si nécessaire (par défaut la durée de la section reste 11 s, le nombre de cas divise cette durée).
+Ajoutez ou retirez des entrées : `UseCasesFlashScene.tsx` divise automatiquement la durée de la section (11 s storyboard) par le nombre de cas.
 
 Les icônes disponibles sont définies dans `src/components/Icon.tsx` (`mail`, `doc`, `bell`, `database`, `chat`, `chart`, `loupe`, `bulb`, `gear`, `growth`). Les mockups sont dans `src/components/UseCaseCard.tsx`.
 
@@ -91,12 +91,23 @@ La charte LTC AI est strictement définie dans [`src/config/brand.ts`](src/confi
 
 | Rôle | Couleur | Hex |
 |---|---|---|
-| Primaire — Bleu nuit LTC | `navy` | `#0A1F3D` |
-| Fond principal — Blanc cassé | `cream` | `#F5F1EA` |
-| Accent chaleureux — CTA | `accent` | `#E8A94E` |
-| Texte secondaire — Gris neutre | `neutral` | `#6B7380` |
+| Bleu principal | `navy` | `#2020CC` |
+| Bleu foncé — CTA / accent | `navyDeep` / `accent` | `#1515AA` |
+| Blanc — fond principal | `cream` | `#FFFFFF` |
+| Gris foncé — texte secondaire | `neutral` | `#1A1A1A` |
+| Noir | `neutralDark` | `#000000` |
 
 Aucune couleur hors de cette palette ne doit être introduite. Si la charte évolue, modifiez uniquement `src/config/brand.ts` — tous les composants s'adapteront.
+
+## Ajuster la vitesse globale
+
+Le rythme est piloté par `brand.speedFactor` dans [`src/config/brand.ts`](src/config/brand.ts) :
+
+- `1.0` → durée 45 s (référence storyboard)
+- `0.75` (défaut) → durée 60 s, 25 % plus lent
+- `0.5` → durée 90 s, moitié plus lent
+
+Tous les timings (séquences, sous-titres, durée totale) sont recalculés automatiquement.
 
 ## Structure du projet
 

@@ -22,19 +22,22 @@ export type Explainer45sProps = {
   language: Language;
 };
 
-// Timings en secondes → frames @ 30fps
-const fps = 30;
-const s = (n: number) => Math.round(n * fps);
+// Timings en secondes "storyboard" (à vitesse 1x) → frames réels,
+// en appliquant le facteur de vitesse global (brand.speedFactor).
+// speedFactor = 0.75 → chaque seconde de storyboard occupe 1/0.75 ≈ 1.333 s réels.
+const FPS = 30;
+const s = (n: number) => Math.round((n / brand.speedFactor) * FPS);
 
 /**
- * Composition principale — 45s @ 30fps, 1080x1350 (4:5 Facebook Feed).
+ * Composition principale — 1080x1350 (4:5 Facebook Feed), 30 fps.
+ * Durée réelle = 45 s / speedFactor (0.75 → 60 s).
  *
- * Séquençage :
+ * Séquençage (en secondes "storyboard" à vitesse 1x) :
  *  0-4s    Hook
  *  4-10s   Process Intro (4 étapes)
  *  10-16s  Audit (zoom étape 1)
  *  16-22s  Recommandations + Implémentation (étapes 2+3)
- *  22-33s  Flash 6 cas d'usage (~1.8s chacun)
+ *  22-33s  Flash 6 cas d'usage
  *  33-39s  Suivi + tagline "L'IA, simplement."
  *  39-45s  CTA final
  */

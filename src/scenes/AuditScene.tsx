@@ -42,7 +42,7 @@ export const AuditScene: React.FC = () => {
           backgroundColor: brand.colors.navy,
         }}
       >
-        <Icon name="loupe" size={32} color={brand.colors.accent} stroke={2.6} />
+        <Icon name="loupe" size={32} color={brand.colors.cream} stroke={2.6} />
         <div
           style={{
             fontFamily: brand.fonts.family,
@@ -127,7 +127,7 @@ export const AuditScene: React.FC = () => {
                       <svg width={14} height={14} viewBox="0 0 14 14">
                         <path
                           d="M2 7 L6 11 L12 3"
-                          stroke={brand.colors.accent}
+                          stroke={brand.colors.cream}
                           strokeWidth={2.5}
                           fill="none"
                           strokeLinecap="round"
@@ -141,7 +141,7 @@ export const AuditScene: React.FC = () => {
                       fontFamily: brand.fonts.family,
                       fontWeight: brand.fonts.weights.semibold,
                       fontSize: 20,
-                      color: brand.colors.navy,
+                      color: done ? brand.colors.cream : brand.colors.navy,
                     }}
                   >
                     {label}
@@ -178,7 +178,7 @@ export const AuditScene: React.FC = () => {
                 fontFamily: brand.fonts.family,
                 fontWeight: brand.fonts.weights.heavy,
                 fontSize: 44,
-                color: brand.colors.accent,
+                color: brand.colors.cream,
               }}
             >
               {Math.round(progress * 14)}h / sem
@@ -205,8 +205,8 @@ export const AuditScene: React.FC = () => {
                       height: `${h * 100 * p}%`,
                       backgroundColor:
                         i === 5
-                          ? brand.colors.accent
-                          : 'rgba(232, 169, 78, 0.45)',
+                          ? brand.colors.cream
+                          : 'rgba(255, 255, 255, 0.35)',
                       borderRadius: 4,
                     }}
                   />

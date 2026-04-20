@@ -1,28 +1,30 @@
 /**
  * LTC AI — Brand configuration.
- * Palette signature LTC AI : bleu nuit, blanc cassé, accent chaleureux, gris neutre.
+ * Palette stricte : bleu principal, bleu foncé, noir, gris foncé, blanc.
  * Toute couleur utilisée dans le projet DOIT provenir de ce fichier.
  */
 
 export const brand = {
   colors: {
-    // Bleu nuit LTC — primaire (fonds sombres, titres, éléments forts)
-    navy: '#0A1F3D',
-    navyDeep: '#071630',
-    navySoft: '#1B325A',
+    // Bleu principal (primaire)
+    navy: '#2020CC',
+    // Bleu foncé (éléments sombres, accents profonds)
+    navyDeep: '#1515AA',
+    navySoft: '#1515AA',
 
-    // Blanc cassé — fond principal clair
-    cream: '#F5F1EA',
-    creamSoft: '#FBF8F2',
+    // Blanc (fond principal)
+    cream: '#FFFFFF',
+    creamSoft: '#FFFFFF',
 
-    // Accent chaleureux — CTA, highlights, points d'intérêt
-    accent: '#E8A94E',
-    accentSoft: '#F0C079',
+    // Accent = bleu foncé (CTA, highlights)
+    accent: '#1515AA',
+    accentSoft: '#2020CC',
 
-    // Gris neutre — texte secondaire, bordures discrètes (pas de noir pur)
-    neutral: '#6B7380',
-    neutralLight: '#AEB4BE',
-    neutralDark: '#3E4656',
+    // Gris foncé / noir (textes secondaires, contrastes)
+    neutral: '#1A1A1A',
+    // Dérivé semi-transparent pour bordures & placeholders doux
+    neutralLight: 'rgba(26, 26, 26, 0.18)',
+    neutralDark: '#000000',
   },
 
   fonts: {
@@ -49,6 +51,9 @@ export const brand = {
 
   tagline: "L'IA, simplement.",
   website: 'ltcai.be',
+
+  // Facteur de vitesse de la vidéo (1 = 100%, 0.75 = 25% plus lent)
+  speedFactor: 0.75,
 
   // Switch pour activer/désactiver la musique de fond (public/bg-music.mp3)
   enableBackgroundMusic: false,

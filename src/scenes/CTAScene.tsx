@@ -59,11 +59,11 @@ export const CTAScene: React.FC = () => {
           padding: '28px 60px',
           backgroundColor: brand.colors.accent,
           borderRadius: 999,
-          boxShadow: '0 18px 40px rgba(232, 169, 78, 0.45)',
+          boxShadow: '0 18px 40px rgba(21, 21, 170, 0.45)',
           fontFamily: brand.fonts.family,
           fontWeight: brand.fonts.weights.heavy,
           fontSize: 42,
-          color: brand.colors.navy,
+          color: brand.colors.cream,
           letterSpacing: 0.3,
         }}
       >

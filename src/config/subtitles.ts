@@ -1,7 +1,11 @@
 /**
  * Sous-titres centralisés — vidéo silent-friendly.
- * Timings alignés sur le storyboard 45s @ 30fps (total 1350 frames).
+ * Timings alignés sur le storyboard 45s (à vitesse 1x) @ 30fps.
+ * Tous les timings sont multipliés par 1/brand.speedFactor pour gérer
+ * un ralentissement global (ex. 0.75 → vidéo étendue à 60s).
  */
+
+import {brand} from './brand';
 
 export type Language = 'fr' | 'nl';
 
@@ -14,8 +18,10 @@ export type Subtitle = {
 
 type SubtitleMap = Record<Language, Subtitle[]>;
 
-// Helpers
-const sec = (s: number) => Math.round(s * 30);
+// Helper : convertit des secondes "storyboard" (à vitesse 1x) en frames réels,
+// en appliquant le facteur de vitesse global (brand.speedFactor).
+const FPS = 30;
+const sec = (s: number) => Math.round((s / brand.speedFactor) * FPS);
 
 export const subtitles: SubtitleMap = {
   fr: [
@@ -59,18 +65,14 @@ export const subtitles: SubtitleMap = {
       endFrame: sec(33),
     },
 
-    // [33-39s] FOLLOW-UP + PROMISE
+    // [33-39s] FOLLOW-UP
+    // Note : le tagline "L'IA, simplement." est affiché en grand texte
+    // à l'écran par FollowUpScene — pas besoin de le dupliquer en sous-titre.
     {
       scene: 'followup',
       text: 'Et on reste à vos côtés pour faire évoluer vos outils.',
       startFrame: sec(33.4),
       endFrame: sec(37),
-    },
-    {
-      scene: 'followup',
-      text: "L'IA, simplement.",
-      startFrame: sec(37.1),
-      endFrame: sec(39),
     },
 
     // [39-45s] CTA
@@ -114,17 +116,12 @@ export const subtitles: SubtitleMap = {
       startFrame: sec(22.4),
       endFrame: sec(33),
     },
+    // Tagline affiché à l'écran par FollowUpScene — pas dupliqué ici.
     {
       scene: 'followup',
       text: 'En we blijven naast u staan om uw tools te laten evolueren.',
       startFrame: sec(33.4),
       endFrame: sec(37),
-    },
-    {
-      scene: 'followup',
-      text: 'AI, eenvoudig.',
-      startFrame: sec(37.1),
-      endFrame: sec(39),
     },
     {
       scene: 'cta',

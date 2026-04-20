@@ -28,7 +28,7 @@ export const MockupFrame: React.FC<Props> = ({
         backgroundColor: brand.colors.creamSoft,
         borderRadius: 20,
         border: `2px solid ${brand.colors.neutralLight}`,
-        boxShadow: '0 20px 60px rgba(7, 22, 48, 0.18)',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.18)',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
@@ -78,7 +78,7 @@ const Dot: React.FC = () => (
       width: 12,
       height: 12,
       borderRadius: '50%',
-      backgroundColor: brand.colors.neutralLight,
+      backgroundColor: brand.colors.cream,
       opacity: 0.5,
     }}
   />

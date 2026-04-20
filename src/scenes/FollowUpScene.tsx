@@ -42,7 +42,7 @@ export const FollowUpScene: React.FC = () => {
       >
         <path
           d="M 0 700 Q 300 600 500 480 T 900 200 T 1200 50"
-          stroke={brand.colors.accent}
+          stroke={brand.colors.cream}
           strokeWidth={6}
           fill="none"
           strokeDasharray={1600}
@@ -64,7 +64,7 @@ export const FollowUpScene: React.FC = () => {
               cx={x}
               cy={y}
               r={10}
-              fill={brand.colors.accent}
+              fill={brand.colors.cream}
               opacity={show ? 1 : 0}
             />
           );
@@ -100,7 +100,7 @@ export const FollowUpScene: React.FC = () => {
           duration={20}
           size={62}
           weight="heavy"
-          color={brand.colors.accent}
+          color={brand.colors.cream}
           align="center"
           letterSpacing={-0.5}
         >

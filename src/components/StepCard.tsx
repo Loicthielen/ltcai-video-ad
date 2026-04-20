@@ -57,8 +57,8 @@ export const StepCard: React.FC<Props> = ({
         }`,
         borderRadius: 18,
         boxShadow: highlight
-          ? '0 10px 30px rgba(232, 169, 78, 0.22)'
-          : '0 6px 18px rgba(7, 22, 48, 0.08)',
+          ? '0 10px 30px rgba(21, 21, 170, 0.28)'
+          : '0 6px 18px rgba(0, 0, 0, 0.10)',
       }}
     >
       <div
@@ -78,7 +78,7 @@ export const StepCard: React.FC<Props> = ({
         <Icon
           name={icon}
           size={44}
-          color={highlight ? brand.colors.navy : brand.colors.cream}
+          color={brand.colors.cream}
           stroke={2.4}
         />
       </div>

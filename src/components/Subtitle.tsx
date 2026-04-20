@@ -57,8 +57,8 @@ export const Subtitle: React.FC<Props> = ({
       : variant;
   const isOnDark = resolvedVariant === 'onDark';
   const blockBg = isOnDark
-    ? 'rgba(245, 241, 234, 0.96)' // cream translucide sur navy
-    : 'rgba(10, 31, 61, 0.92)'; // navy translucide sur cream
+    ? 'rgba(255, 255, 255, 0.96)' // blanc translucide sur fond bleu
+    : 'rgba(32, 32, 204, 0.94)'; // bleu principal translucide sur blanc
   const textColor = isOnDark ? brand.colors.navy : brand.colors.cream;
 
   return (
@@ -85,7 +85,7 @@ export const Subtitle: React.FC<Props> = ({
           lineHeight: 1.25,
           textAlign: 'center',
           letterSpacing: 0.2,
-          boxShadow: '0 6px 24px rgba(7, 22, 48, 0.18)',
+          boxShadow: '0 6px 24px rgba(0, 0, 0, 0.22)',
         }}
       >
         {active.text}

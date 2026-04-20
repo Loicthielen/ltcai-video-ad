@@ -73,8 +73,8 @@ export const BrandLogo: React.FC<Props> = ({
           borderRadius: size * 0.18,
           backgroundColor:
             variant === 'onDark'
-              ? 'rgba(232, 169, 78, 0.14)'
-              : 'rgba(232, 169, 78, 0.16)',
+              ? 'rgba(255, 255, 255, 0.14)'
+              : 'rgba(21, 21, 170, 0.10)',
           lineHeight: 1,
         }}
       >

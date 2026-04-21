@@ -5,6 +5,7 @@ import { Hook } from "./scenes/Hook";
 import { Problem } from "./scenes/Problem";
 import { Solution } from "./scenes/Solution";
 import { CTA } from "./scenes/CTA";
+import { LogoWatermark } from "./components/Logo";
 import { AdCopy, DEFAULT_COPY, TIMING, toFrames } from "./config/brand";
 
 // Charge la typo côté Remotion (studio + render)
@@ -66,6 +67,11 @@ export const AdVideo: React.FC<AdVideoProps> = ({ copy, url }) => {
           url={url}
         />
       </Sequence>
+
+      {/* Watermark logo — toujours visible, coin supérieur droit. */}
+      <AbsoluteFill style={{ pointerEvents: "none" }}>
+        <LogoWatermark />
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };

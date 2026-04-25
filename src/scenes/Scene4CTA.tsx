@@ -8,131 +8,89 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { brand, safeZone } from "../theme/brand";
-import { ParticleField } from "../components/ParticleField";
-import { GlowWrapper } from "../components/GlowWrapper";
+import { brand } from "../theme/brand";
 import { KineticText } from "../components/KineticText";
 import { Float } from "../components/Float";
 
-// Scene 4 — CTA (frames 330-450 = local 0-120)
-// Logo intro, "Diagnostic gratuit", "30 minutes offertes", CTA button + shine,
-// confetti particles, final fade.
+// Scene 4 — CTA. Sober. Logo + "Diagnostic gratuit" + ltcai.be button.
+// No confetti, no shine sweep, no intense bloom, no "30 minutes offertes".
 export const Scene4CTA: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const local = frame;
 
-  // Logo entry: scale 0 -> 1.15 -> 1.0
-  const logoSpring = spring({
+  // Logo entry: scale 0 -> 1.0 with calm spring (no overshoot)
+  const logoEnter = spring({
     frame: local,
     fps,
-    config: { damping: 9, stiffness: 130 },
+    config: { damping: 26, stiffness: 100 },
   });
-  const logoOvershoot =
-    local < 16 ? 0 : Math.exp(-(local - 16) / 14) * Math.sin((local - 16) / 6) * 0.1;
-  const logoScale = logoSpring * 1.0 + logoOvershoot;
+  const logoScale = logoEnter;
 
-  // Background pulsing gradient
-  const breathe = 1 + Math.sin(local / 18) * 0.012;
+  // Halo: opacity 0.15 <-> 0.25 over ~2s loop
+  const haloLoop = 0.5 + 0.5 * Math.sin((local / 60) * Math.PI * 2);
+  const haloOpacity = 0.15 + haloLoop * 0.1;
 
-  // Final fade: opacity 1 -> 0.85 last 10 frames + slight zoom
+  // Outro fade
   const outroT = interpolate(local, [110, 119], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
   const outroOpacity = 1 - outroT * 0.15;
-  const outroZoom = 1 + outroT * 0.02;
 
   return (
     <AbsoluteFill
       style={{
-        background: `radial-gradient(circle at 50% 40%, #1d4f9a 0%, ${brand.navy} 50%, ${brand.navyDeep} 100%)`,
+        background: `radial-gradient(circle at 50% 40%, #1d4f9a 0%, ${brand.navy} 55%, ${brand.navyDeep} 100%)`,
         overflow: "hidden",
-        transform: `scale(${breathe * outroZoom})`,
         opacity: outroOpacity,
       }}
     >
-      {/* Diagonal subtle rays */}
-      <svg
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.25,
-          mixBlendMode: "screen",
-        }}
-        viewBox="0 0 1080 1920"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <linearGradient id="ctaRay" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={brand.gold} stopOpacity="0" />
-            <stop offset="50%" stopColor={brand.gold} stopOpacity="0.45" />
-            <stop offset="100%" stopColor={brand.gold} stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        {Array.from({ length: 6 }).map((_, i) => {
-          const shift = ((local * 0.4) % 200) + i * 220 - 200;
-          return (
-            <polygon
-              key={i}
-              points={`${shift},0 ${shift + 70},0 ${shift + 280},1920 ${shift + 210},1920`}
-              fill="url(#ctaRay)"
-            />
-          );
-        })}
-      </svg>
+      {/* Subtle ambient field — same monochrome blue particles as Scene 3 */}
+      <SubtleField frame={local} />
 
-      {/* Confetti particles */}
-      <ParticleField
-        count={50}
-        colors={[brand.blueLight, brand.cyan, brand.gold, brand.goldLight, brand.white]}
-        width={1080}
-        height={1920}
-        mode="rain"
-        speed={0.6}
-        size={[3, 7]}
-        seed="cta-confetti"
-        emitStart={6}
-        opacity={0.7}
-      />
-
-      {/* Logo */}
+      {/* Logo + soft halo */}
       <div
         style={{
           position: "absolute",
-          top: 360,
+          top: 420,
           left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
-          opacity: Math.min(1, logoSpring * 1.6),
+          opacity: Math.min(1, logoEnter * 1.4),
         }}
       >
-        <Float seed="logo" amplitude={3} period={90}>
-          <GlowWrapper
-            color={brand.cyan}
-            intensity={1.0}
-            pulse
-            pulseAmplitude={0.25}
-            pulsePeriod={48}
+        <Float seed="logo" amplitude={2} period={120}>
+          <div
+            style={{
+              position: "relative",
+              transform: `scale(${logoScale})`,
+              transformOrigin: "50% 50%",
+            }}
           >
             <div
+              aria-hidden
               style={{
-                transform: `scale(${logoScale})`,
-                transformOrigin: "50% 50%",
+                position: "absolute",
+                inset: -160,
+                borderRadius: 999,
+                background: `radial-gradient(circle, ${brand.blueGlow} 0%, transparent 65%)`,
+                opacity: haloOpacity,
+                filter: "blur(36px)",
+                pointerEvents: "none",
               }}
-            >
-              <Img
-                src={staticFile("ltcai-logo.svg")}
-                style={{
-                  width: 720,
-                  height: "auto",
-                  display: "block",
-                  filter: `drop-shadow(0 0 24px ${brand.cyan})`,
-                }}
-              />
-            </div>
-          </GlowWrapper>
+            />
+            <Img
+              src={staticFile("ltcai-logo.svg")}
+              style={{
+                position: "relative",
+                width: 660,
+                height: "auto",
+                display: "block",
+              }}
+            />
+          </div>
         </Float>
       </div>
 
@@ -140,124 +98,76 @@ export const Scene4CTA: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: 800,
+          top: 880,
           left: 0,
           right: 0,
           textAlign: "center",
-          padding: "0 40px",
+          padding: "0 50px",
         }}
       >
         <KineticText
           text="Diagnostic gratuit"
           startFrame={28}
-          staggerPerWord={6}
-          fontSize={96}
+          staggerPerWord={8}
+          fontSize={104}
           weight={900}
           color={brand.white}
-          glow={brand.cyan}
+          letterSpacing={-2}
         />
       </div>
 
-      {/* "30 minutes offertes" reveal wipe */}
-      <RevealWipe
-        local={local}
-        startFrame={48}
-        duration={20}
-        text="30 minutes offertes"
-        top={930}
-      />
-
       {/* Button */}
-      <CTAButton local={local} />
-
-      {/* Tagline whisper */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 470,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          fontFamily: "Inter,sans-serif",
-          fontWeight: 600,
-          fontSize: 36,
-          color: brand.cyanLight,
-          opacity: interpolate(local, [50, 70], [0, 0.85], {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-          }),
-          letterSpacing: 4,
-          textTransform: "uppercase",
-        }}
-      >
-        L'IA, simplement.
-      </div>
+      <CTAButton local={local} fps={fps} />
     </AbsoluteFill>
   );
 };
 
-const RevealWipe: React.FC<{
-  local: number;
-  startFrame: number;
-  duration: number;
-  text: string;
-  top: number;
-}> = ({ local, startFrame, duration, text, top }) => {
-  const t = interpolate(local, [startFrame, startFrame + duration], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+const SubtleField: React.FC<{ frame: number }> = ({ frame }) => {
+  // 14 very faint blue dots floating slowly. No confetti.
+  const items = 14;
   return (
-    <div
-      style={{
-        position: "absolute",
-        top,
-        left: 0,
-        right: 0,
-        textAlign: "center",
-        clipPath: `inset(0 ${(1 - t) * 100}% 0 0)`,
-        opacity: Math.min(1, t * 3),
-      }}
+    <svg
+      style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
+      viewBox="0 0 1080 1920"
     >
-      <div
-        style={{
-          fontFamily: "Inter,sans-serif",
-          fontWeight: 700,
-          fontSize: 70,
-          color: brand.goldLight,
-          letterSpacing: -1,
-          textShadow: `0 0 20px ${brand.gold}`,
-        }}
-      >
-        {text}
-      </div>
-    </div>
+      {Array.from({ length: items }).map((_, i) => {
+        const seed = (i * 9301 + 49297) % 233280;
+        const r1 = (seed % 1000) / 1000;
+        const r2 = ((seed * 7) % 1000) / 1000;
+        const r3 = ((seed * 13) % 1000) / 1000;
+        const x = r1 * 1080 + Math.sin((frame + i * 13) * 0.008) * 10;
+        const y = r2 * 1920 + Math.cos((frame + i * 17) * 0.009) * 10;
+        return (
+          <circle
+            key={i}
+            cx={x}
+            cy={y}
+            r={2 + r3 * 2}
+            fill={brand.blueGlow}
+            opacity={0.22}
+          />
+        );
+      })}
+    </svg>
   );
 };
 
-const CTAButton: React.FC<{ local: number }> = ({ local }) => {
+const CTAButton: React.FC<{ local: number; fps: number }> = ({ local, fps }) => {
   const enter = spring({
-    frame: local - 60,
-    fps: 30,
-    config: { damping: 10, stiffness: 130 },
+    frame: local - 56,
+    fps,
+    config: { damping: 22, stiffness: 100 },
   });
-  // Pulse 1.0 <-> 1.05 sinusoidal, period 36 frames (~1.2s)
-  const pulse = 1 + Math.sin(((local - 70) / 36) * Math.PI * 2) * 0.04;
+  // Pulse 1.0 <-> 1.02 max
+  const pulse = 1 + Math.sin(((local - 70) / 36) * Math.PI * 2) * 0.018;
   const scale = enter * pulse;
   const opacity = Math.min(1, enter * 1.2);
-
-  // Shine sweep at local 80 (relative)
-  const shineT = interpolate(local, [78, 92], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const showShine = shineT > 0 && shineT < 1;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: 1080,
+        top: 1100,
         left: 0,
         right: 0,
         display: "flex",
@@ -269,44 +179,19 @@ const CTAButton: React.FC<{ local: number }> = ({ local }) => {
         style={{
           transform: `scale(${scale})`,
           transformOrigin: "50% 50%",
-          position: "relative",
+          padding: "32px 96px",
+          borderRadius: 90,
+          background: brand.white,
+          boxShadow: `0 14px 42px ${brand.navyDeep}aa, 0 0 70px ${brand.blueGlow}55`,
+          fontFamily: "Inter,sans-serif",
+          fontWeight: 900,
+          fontSize: 96,
+          color: brand.navy,
+          letterSpacing: -2,
+          border: `2px solid ${brand.blueLight}`,
         }}
       >
-        <div
-          style={{
-            position: "relative",
-            padding: "32px 80px",
-            borderRadius: 80,
-            background: `linear-gradient(135deg, ${brand.gold} 0%, ${brand.goldLight} 50%, ${brand.gold} 100%)`,
-            boxShadow: `0 14px 50px ${brand.gold}99, 0 0 90px ${brand.gold}66, inset 0 0 30px rgba(255,255,255,0.25)`,
-            fontFamily: "Inter,sans-serif",
-            fontWeight: 900,
-            fontSize: 78,
-            color: brand.navyDeep,
-            letterSpacing: -1,
-            overflow: "hidden",
-            border: `4px solid ${brand.white}`,
-          }}
-        >
-          ltcai.be
-          {/* Shine sweep */}
-          {showShine && (
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                width: 180,
-                left: `${shineT * 110 - 30}%`,
-                background:
-                  "linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.85) 50%, transparent 100%)",
-                transform: "skewX(-22deg)",
-                pointerEvents: "none",
-                mixBlendMode: "screen",
-              }}
-            />
-          )}
-        </div>
+        ltcai.be
       </div>
     </div>
   );

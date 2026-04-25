@@ -63,8 +63,8 @@ export const LTCAIAdAudit15s: React.FC = () => {
         </Sequence>
       )}
 
-      {/* Grain overlay - persistent across all scenes */}
-      <GrainOverlay intensity={0.04} />
+      {/* Grain overlay - very subtle, ~3% */}
+      <GrainOverlay intensity={0.025} />
 
       {/*
         Voiceover (currently a 15s silent placeholder - production VO TBD).

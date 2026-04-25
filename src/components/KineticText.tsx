@@ -1,5 +1,6 @@
 import React from "react";
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { brand } from "../theme/brand";
 
 type Props = {
   text: string;
@@ -9,28 +10,24 @@ type Props = {
   color?: string;
   weight?: number | string;
   letterSpacing?: number;
-  emphasis?: boolean; // overshoot pulse
   exit?: { startFrame: number; mode?: "fade" | "rise" };
   align?: "left" | "center" | "right";
   glow?: string | null;
-  outline?: string | null;
 };
 
-// Kinetic typography: words appear staggered with spring overshoot,
-// translateY+scale combined. Optional emphasis pulse mid-life.
+// Kinetic typography: words appear staggered with sober spring,
+// translateY+scale combined. No emphasis pulse — kept calm.
 export const KineticText: React.FC<Props> = ({
   text,
   startFrame,
   staggerPerWord = 5,
   fontSize = 110,
-  color = "#F8FAFC",
+  color = brand.white,
   weight = 800,
   letterSpacing = -2,
-  emphasis = false,
   exit,
   align = "center",
   glow = null,
-  outline = null,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -40,8 +37,8 @@ export const KineticText: React.FC<Props> = ({
     ? spring({
         frame: frame - exit.startFrame,
         fps,
-        config: { damping: 18, stiffness: 120 },
-        durationInFrames: 18,
+        config: { damping: 22, stiffness: 110 },
+        durationInFrames: 22,
       })
     : 0;
 
@@ -67,20 +64,12 @@ export const KineticText: React.FC<Props> = ({
         const enter = spring({
           frame: t,
           fps,
-          config: { damping: 11, stiffness: 140, mass: 0.6 },
+          config: { damping: 14, stiffness: 110, mass: 0.6 },
         });
-        // Emphasis pulse: scale 1.0 → 1.18 → 1.0 around frame +18
-        let pulse = 0;
-        if (emphasis) {
-          const pf = t - 18;
-          if (pf > 0 && pf < 18) {
-            pulse = Math.sin((pf / 18) * Math.PI) * 0.22;
-          }
-        }
-        const scale = 0.82 + enter * 0.18 + pulse;
-        const ty = (1 - enter) * 50;
+        const scale = 0.92 + enter * 0.08;
+        const ty = (1 - enter) * 32;
         const opacity = Math.min(1, Math.max(0, enter)) * (1 - exitProgress);
-        const exitTy = exit?.mode === "rise" ? -exitProgress * 60 : 0;
+        const exitTy = exit?.mode === "rise" ? -exitProgress * 40 : 0;
 
         return (
           <span
@@ -97,9 +86,8 @@ export const KineticText: React.FC<Props> = ({
               opacity,
               lineHeight: 1.05,
               textShadow: glow
-                ? `0 0 24px ${glow}, 0 0 60px ${glow}`
+                ? `0 0 24px ${glow}`
                 : undefined,
-              WebkitTextStroke: outline ? `2px ${outline}` : undefined,
             }}
           >
             {word}

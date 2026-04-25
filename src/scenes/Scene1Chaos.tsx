@@ -3,66 +3,59 @@ import {
   AbsoluteFill,
   interpolate,
   random,
-  spring,
   useCurrentFrame,
-  useVideoConfig,
 } from "remotion";
-import { brand, safeZone, VIDEO } from "../theme/brand";
+import { Mail, Clock, Folder, Bell } from "lucide-react";
+import { brand, safeZone } from "../theme/brand";
 import { KineticText } from "../components/KineticText";
 import { Float } from "../components/Float";
 
-// Scene 1 — chaos in a PME: stacking emails, spinning clock, falling folders,
-// pop notifications, diagonal "time passing" lines, dolly-zoom in.
+// Scene 1 — sober chaos. Monochrome blue palette only.
+// Pictograms (lucide-react), no emojis, no red.
+// Aimed at the same calm intensity as the first 12 frames.
 export const Scene1Chaos: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const local = frame; // scene starts at frame 0
-  const sceneEnd = 120;
+  const local = frame;
+  const sceneEnd = 132;
 
-  // Dolly-in: scale 1.0 -> 1.15 over 120 frames + subtle vibration near end
-  const dolly = interpolate(local, [0, sceneEnd], [1.0, 1.15], {
+  // Very subtle dolly-in (1.0 -> 1.05 over 4s) — was 1.15.
+  const dolly = interpolate(local, [0, sceneEnd], [1.0, 1.05], {
     extrapolateRight: "clamp",
   });
-  const vibrate =
-    local > 105
-      ? Math.sin(local * 6) * (local - 105) * 0.6
-      : 0;
 
-  // Background slow-shifting gradient
-  const gradAngle = 135 + Math.sin(local / 40) * 10;
-  const gradPos = (local / 6) % 100;
+  // Fade-out toward bascule transition: stagger handled inside elements.
+  const exitT = interpolate(local, [110, 132], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
     <AbsoluteFill
       style={{
-        background: `linear-gradient(${gradAngle}deg, ${brand.navyDeep} 0%, ${brand.navy} ${gradPos}%, #1a2a4a 100%)`,
+        background: `linear-gradient(160deg, ${brand.navyDeep} 0%, ${brand.navy} 60%, ${brand.navySoft} 100%)`,
         overflow: "hidden",
-        transform: `scale(${dolly}) translate(${vibrate}px, ${vibrate * 0.7}px)`,
+        transform: `scale(${dolly})`,
         transformOrigin: "50% 50%",
       }}
     >
       {/* Layer 1: parallax grid */}
-      <ParallaxGrid frame={local} />
+      <ParallaxGrid frame={local} exitT={exitT} />
 
-      {/* Layer 2: pain points */}
-      <EmailFlood frame={local} />
-      <SpinningClock frame={local} />
-      <FallingFolders frame={local} />
-      <Notifications frame={local} />
-
-      {/* Diagonal "time" lines */}
-      <DiagonalTimeLines frame={local} />
+      {/* Layer 2: pain points (sober) */}
+      <EmailStream frame={local} exitT={exitT} />
+      <FocusClock frame={local} exitT={exitT} />
+      <FolderStack frame={local} exitT={exitT} />
+      <NotificationCards frame={local} exitT={exitT} />
 
       {/* Layer 3: foreground kinetic text */}
-      <ForegroundText frame={local} fps={fps} />
+      <ForegroundText />
 
       {/* Vignette */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.65) 100%)",
+          background: `radial-gradient(ellipse at 50% 50%, transparent 50%, ${brand.navyDeep}99 100%)`,
           pointerEvents: "none",
         }}
       />
@@ -70,11 +63,18 @@ export const Scene1Chaos: React.FC = () => {
   );
 };
 
-const ParallaxGrid: React.FC<{ frame: number }> = ({ frame }) => {
-  const offset = (frame * 0.6) % 80;
+const ParallaxGrid: React.FC<{ frame: number; exitT: number }> = ({
+  frame,
+  exitT,
+}) => {
+  const offset = (frame * 0.4) % 80;
   return (
     <svg
-      style={{ position: "absolute", inset: 0, opacity: 0.18 }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        opacity: 0.12 * (1 - exitT),
+      }}
       viewBox="0 0 1080 1920"
       preserveAspectRatio="none"
     >
@@ -90,7 +90,7 @@ const ParallaxGrid: React.FC<{ frame: number }> = ({ frame }) => {
           <path
             d="M 80 0 L 0 0 0 80"
             fill="none"
-            stroke="#3B82F6"
+            stroke={brand.blueLight}
             strokeWidth="1"
           />
         </pattern>
@@ -100,27 +100,35 @@ const ParallaxGrid: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-const EmailFlood: React.FC<{ frame: number }> = ({ frame }) => {
-  // 50+ email pills streaming top-right to bottom-left in a band
-  const items = 56;
+// Stream of mail pills — sober blue, lucide Mail icon, slow drift.
+const EmailStream: React.FC<{ frame: number; exitT: number }> = ({
+  frame,
+  exitT,
+}) => {
+  const items = 28;
   return (
     <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
       {Array.from({ length: items }).map((_, i) => {
         const r1 = random(`em-${i}-a`);
         const r2 = random(`em-${i}-b`);
         const r3 = random(`em-${i}-c`);
-        const stagger = i * 1.6;
+        const stagger = i * 2.6;
         const t = frame - stagger;
         if (t < 0) return null;
-        const startX = 1100 + r1 * 200;
+        const startX = 1180 + r1 * 200;
         const startY = -120 + r2 * 1100;
-        const speed = 4 + r3 * 4;
+        const speed = 2.2 + r3 * 1.6;
         const x = startX - t * speed;
-        const y = startY + t * speed * 0.55;
+        const y = startY + t * speed * 0.45;
         if (x < -300) return null;
-        const op = interpolate(t, [0, 8, 100], [0, 0.85, 0.7], {
+
+        // Stagger fade-out per item
+        const itemExitDelay = (i % 8) * 2;
+        const itemExit = Math.max(0, exitT - itemExitDelay / 22);
+        const op = interpolate(t, [0, 10, 100], [0, 0.55, 0.45], {
           extrapolateRight: "clamp",
-        });
+        }) * (1 - Math.min(1, itemExit * 22));
+
         return (
           <div
             key={i}
@@ -128,28 +136,24 @@ const EmailFlood: React.FC<{ frame: number }> = ({ frame }) => {
               position: "absolute",
               left: x,
               top: y,
-              transform: `rotate(${-12 + r3 * 24}deg)`,
+              transform: `rotate(${-8 + r3 * 16}deg)`,
               opacity: op,
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "6px 12px",
+              borderRadius: 8,
+              background: `${brand.navyMid}cc`,
+              border: `1px solid ${brand.blue}66`,
+              fontFamily: "Inter,sans-serif",
+              fontSize: 14,
+              fontWeight: 600,
+              color: brand.whiteMute,
+              backdropFilter: "blur(2px)",
             }}
           >
-            <div
-              style={{
-                width: 110,
-                height: 32,
-                background: `rgba(239, 68, 68, ${0.55 + r1 * 0.35})`,
-                borderRadius: 6,
-                display: "flex",
-                alignItems: "center",
-                paddingLeft: 8,
-                color: "#fff",
-                fontSize: 14,
-                fontFamily: "Inter,sans-serif",
-                fontWeight: 700,
-                boxShadow: "0 4px 14px rgba(239,68,68,0.4)",
-              }}
-            >
-              ✉ {Math.floor(r2 * 99)} non lus
-            </div>
+            <Mail size={16} strokeWidth={1.5} color={brand.blueGlow} />
+            {Math.floor(r2 * 99)} non lus
           </div>
         );
       })}
@@ -157,11 +161,15 @@ const EmailFlood: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-const SpinningClock: React.FC<{ frame: number }> = ({ frame }) => {
-  // 1 turn / second = 12°/frame at 30fps
+const FocusClock: React.FC<{ frame: number; exitT: number }> = ({
+  frame,
+  exitT,
+}) => {
+  // 1 turn / second (12°/frame) -> still fast enough to suggest "time pressure",
+  // without flashing red.
   const angle = frame * 12;
   return (
-    <Float seed="clock" amplitude={6} period={70}>
+    <Float seed="clock" amplitude={3} period={90}>
       <div
         style={{
           position: "absolute",
@@ -170,14 +178,12 @@ const SpinningClock: React.FC<{ frame: number }> = ({ frame }) => {
           width: 220,
           height: 220,
           borderRadius: 999,
-          background:
-            "radial-gradient(circle, rgba(239,68,68,0.15) 0%, transparent 70%)",
-          border: "6px solid #EF4444",
-          boxShadow: "0 0 40px rgba(239,68,68,0.55)",
-          opacity: 0.9,
+          border: `4px solid ${brand.blueLight}`,
+          background: `${brand.navyDeep}AA`,
+          opacity: 0.78 * (1 - exitT * 1.3),
+          boxShadow: `0 0 30px ${brand.blue}44`,
         }}
       >
-        {/* Tick marks */}
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
@@ -185,42 +191,39 @@ const SpinningClock: React.FC<{ frame: number }> = ({ frame }) => {
               position: "absolute",
               top: "50%",
               left: "50%",
-              width: 4,
-              height: 14,
-              background: "#F8FAFC",
+              width: 3,
+              height: 12,
+              background: brand.whiteSoft,
               transformOrigin: "50% 96px",
-              transform: `translate(-50%, -50%) rotate(${i * 30}deg) translateY(-96px)`,
-              opacity: 0.75,
+              transform: `translate(-50%, -50%) rotate(${i * 30}deg) translateY(-94px)`,
+              opacity: 0.55,
             }}
           />
         ))}
-        {/* Hour hand */}
         <div
           style={{
             position: "absolute",
             top: "50%",
             left: "50%",
-            width: 6,
-            height: 70,
-            background: "#F8FAFC",
+            width: 5,
+            height: 64,
+            background: brand.whiteSoft,
             transformOrigin: "50% 100%",
             transform: `translate(-50%, -100%) rotate(${angle * 0.083}deg)`,
             borderRadius: 3,
           }}
         />
-        {/* Minute hand */}
         <div
           style={{
             position: "absolute",
             top: "50%",
             left: "50%",
-            width: 4,
-            height: 96,
-            background: "#FCD34D",
+            width: 3,
+            height: 88,
+            background: brand.cyanLight,
             transformOrigin: "50% 100%",
             transform: `translate(-50%, -100%) rotate(${angle}deg)`,
             borderRadius: 2,
-            boxShadow: "0 0 14px #FCD34D",
           }}
         />
         <div
@@ -228,10 +231,10 @@ const SpinningClock: React.FC<{ frame: number }> = ({ frame }) => {
             position: "absolute",
             top: "50%",
             left: "50%",
-            width: 14,
-            height: 14,
+            width: 12,
+            height: 12,
             borderRadius: 999,
-            background: "#FCD34D",
+            background: brand.cyanLight,
             transform: "translate(-50%, -50%)",
           }}
         />
@@ -240,29 +243,32 @@ const SpinningClock: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-const FallingFolders: React.FC<{ frame: number }> = ({ frame }) => {
-  // 6 folders falling with bounce
-  const items = 6;
+const FolderStack: React.FC<{ frame: number; exitT: number }> = ({
+  frame,
+  exitT,
+}) => {
+  const items = 5;
   return (
     <>
       {Array.from({ length: items }).map((_, i) => {
         const r = random(`fold-${i}`);
-        const stagger = i * 8 + 10;
+        const stagger = i * 8 + 14;
         const t = frame - stagger;
         if (t < 0) return null;
-        const baseX = 720 + r * 220;
-        const targetY = 1300 + i * 18;
+        const baseX = 720 + r * 200;
+        const targetY = 1320 + i * 16;
         const startY = -200;
-        // Gravity-like fall with bounce
         const fallT = t / 30;
         let y = startY + 0.5 * 1900 * fallT * fallT;
         let bounce = 0;
         if (y > targetY) {
           const over = (y - targetY) / 180;
-          bounce = Math.exp(-over * 2.5) * Math.sin(over * 12) * -40;
+          bounce = Math.exp(-over * 2.5) * Math.sin(over * 12) * -28;
           y = targetY + bounce;
         }
-        const rot = (r - 0.5) * 30 + (t > 35 ? 0 : (t - 35) * 1.5);
+        const rot = (r - 0.5) * 22 + (t > 35 ? 0 : (t - 35) * 1);
+        const itemExit = Math.max(0, exitT - (items - i) * 0.04);
+        const op = (1 - Math.min(1, itemExit * 5)) * 0.92;
         return (
           <div
             key={i}
@@ -270,37 +276,13 @@ const FallingFolders: React.FC<{ frame: number }> = ({ frame }) => {
               position: "absolute",
               left: baseX,
               top: y,
-              width: 180,
-              height: 130,
               transform: `rotate(${rot}deg)`,
-              filter: "drop-shadow(0 14px 22px rgba(0,0,0,0.45))",
+              opacity: op,
+              filter: `drop-shadow(0 10px 18px ${brand.navyDeep}99)`,
+              color: brand.blueGlow,
             }}
           >
-            <svg viewBox="0 0 180 130" width="180" height="130">
-              <path
-                d="M0 28 L70 28 L88 12 L180 12 L180 130 L0 130 Z"
-                fill="#1E40AF"
-                stroke="#3B82F6"
-                strokeWidth="2"
-              />
-              <rect x="0" y="38" width="180" height="92" fill="#2563EB" />
-              <rect
-                x="20"
-                y="58"
-                width={120 - i * 8}
-                height="6"
-                fill="#93C5FD"
-                opacity="0.5"
-              />
-              <rect
-                x="20"
-                y="74"
-                width={90 - i * 6}
-                height="6"
-                fill="#93C5FD"
-                opacity="0.4"
-              />
-            </svg>
+            <Folder size={150} strokeWidth={1.4} fill={brand.navyMid} />
           </div>
         );
       })}
@@ -308,89 +290,71 @@ const FallingFolders: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-const Notifications: React.FC<{ frame: number }> = ({ frame }) => {
+const NotificationCards: React.FC<{ frame: number; exitT: number }> = ({
+  frame,
+  exitT,
+}) => {
   const messages = [
-    { t: 18, label: "Rappel : facture" },
-    { t: 36, label: "Mail urgent" },
-    { t: 58, label: "Réunion 14h" },
-    { t: 80, label: "Slack: 7 msgs" },
-    { t: 98, label: "Devis à envoyer" },
+    { t: 22, label: "Rappel : facture" },
+    { t: 42, label: "Mail urgent" },
+    { t: 64, label: "Réunion 14h" },
+    { t: 88, label: "Devis à envoyer" },
   ];
   return (
     <>
       {messages.map((m, i) => {
         const t = frame - m.t;
         if (t < 0) return null;
-        // Spring-like overshoot scale: 0 -> 1.15 -> 1.0
         let scale: number;
-        if (t < 8) scale = (t / 8) * 1.18;
-        else if (t < 14) scale = 1.18 - ((t - 8) / 6) * 0.18;
+        if (t < 10) scale = 0.92 + (t / 10) * 0.08;
         else scale = 1.0;
-        const op = Math.min(1, t / 5) * (t > 70 ? Math.max(0, 1 - (t - 70) / 25) : 1);
+        const baseOp = Math.min(1, t / 6);
+        const itemExit = Math.max(0, exitT - i * 0.05);
+        const op = baseOp * (1 - Math.min(1, itemExit * 5));
         const x = 70 + (i % 2) * 540;
-        const y = 700 + i * 90 + (i % 2) * 30;
+        const y = 700 + i * 100 + (i % 2) * 30;
         return (
-          <div
+          <Float
             key={i}
+            seed={`notif-${i}`}
+            amplitude={2}
+            period={90}
             style={{
               position: "absolute",
               left: x,
               top: y,
               transform: `scale(${scale})`,
               opacity: op,
-              background: "rgba(15, 23, 42, 0.92)",
-              border: "2px solid #EF4444",
-              borderLeft: "8px solid #EF4444",
-              borderRadius: 14,
-              padding: "12px 18px",
-              fontFamily: "Inter,sans-serif",
-              fontWeight: 700,
-              fontSize: 22,
-              color: "#FEE2E2",
-              boxShadow: "0 8px 28px rgba(239,68,68,0.5)",
-              backdropFilter: "blur(6px)",
             }}
           >
-            🔔 {m.label}
-          </div>
+            <div
+              style={{
+                background: `${brand.navySoft}D9`,
+                border: `1.5px solid ${brand.blueLight}80`,
+                borderLeft: `4px solid ${brand.cyanLight}`,
+                borderRadius: 12,
+                padding: "10px 16px",
+                fontFamily: "Inter,sans-serif",
+                fontWeight: 600,
+                fontSize: 22,
+                color: brand.whiteSoft,
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                backdropFilter: "blur(4px)",
+              }}
+            >
+              <Bell size={20} strokeWidth={1.5} color={brand.cyanLight} />
+              {m.label}
+            </div>
+          </Float>
         );
       })}
     </>
   );
 };
 
-const DiagonalTimeLines: React.FC<{ frame: number }> = ({ frame }) => {
-  const lines = 14;
-  return (
-    <svg
-      style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-      viewBox="0 0 1080 1920"
-    >
-      {Array.from({ length: lines }).map((_, i) => {
-        const r = random(`tl-${i}`);
-        const phase = (frame * (3 + r * 4) + i * 220) % 2400;
-        const x = -300 + phase;
-        const y = -200 + ((i * 140 + frame * 0.4) % 2300);
-        return (
-          <line
-            key={i}
-            x1={x}
-            y1={y}
-            x2={x + 280}
-            y2={y + 200}
-            stroke="#60A5FA"
-            strokeWidth={1.6}
-            opacity={0.18 + r * 0.18}
-          />
-        );
-      })}
-    </svg>
-  );
-};
-
-const ForegroundText: React.FC<{ frame: number; fps: number }> = ({
-  frame,
-}) => {
+const ForegroundText: React.FC = () => {
   return (
     <div
       style={{
@@ -409,7 +373,6 @@ const ForegroundText: React.FC<{ frame: number; fps: number }> = ({
         staggerPerWord={0}
         fontSize={150}
         color={brand.white}
-        glow="rgba(96,165,250,0.55)"
       />
       <div style={{ height: 12 }} />
       <KineticText
@@ -417,24 +380,21 @@ const ForegroundText: React.FC<{ frame: number; fps: number }> = ({
         startFrame={25}
         fontSize={130}
         color={brand.white}
-        glow="rgba(96,165,250,0.45)"
       />
       <div style={{ height: 12 }} />
       <KineticText
         text="qui vous prennent"
-        startFrame={40}
-        fontSize={92}
-        weight={700}
-        color={brand.whiteSoft}
+        startFrame={42}
+        fontSize={88}
+        weight={600}
+        color={brand.whiteMute}
       />
       <div style={{ height: 8 }} />
       <KineticText
-        text={"votre temps ?"}
+        text="votre temps ?"
         startFrame={70}
-        fontSize={140}
-        color={brand.gold}
-        emphasis
-        glow={brand.gold}
+        fontSize={130}
+        color={brand.cyanLight}
         weight={900}
       />
     </div>

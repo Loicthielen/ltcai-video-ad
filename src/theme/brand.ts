@@ -1,35 +1,32 @@
-// LTC AI brand theme.
-// NOTE: branding-ltcgroup skill was not available in this environment.
-// Palette below is a sensible default consistent with LTC Group's
-// professional / IT-consulting positioning. Replace via the skill
-// when this runs in an environment that ships it.
+// LTC AI brand theme — v2 sober palette.
+// NOTE: branding-ltcgroup skill not available in this environment.
+// Palette restricted to LTC-typical blues + neutrals only.
+// No gold, no orange, no red, no green.
+// Single source of truth for every color used in the ad.
 
 export const brand = {
-  // Primary deep navy — "ground" color of LTC identity
-  navy: "#0A1628",
+  // Primary deep tones (backgrounds)
   navyDeep: "#050B16",
+  navy: "#0A1628",
   navySoft: "#13243F",
+  navyMid: "#1A2F52",
 
-  // Primary blue — used for energy / activation
+  // Primary blues (energy / activation)
   blue: "#2563EB",
   blueLight: "#3B82F6",
   blueGlow: "#60A5FA",
 
-  // Accent cyan — "AI" highlight color
+  // Accent cyan (highlight only — used sparingly)
   cyan: "#06B6D4",
   cyanLight: "#22D3EE",
-
-  // Accent warm — for the "+15h" climax + CTA shine
-  gold: "#F59E0B",
-  goldLight: "#FCD34D",
+  cyanSoft: "#67E8F9",
 
   // Neutrals
   white: "#F8FAFC",
   whiteSoft: "#E2E8F0",
-  gray: "#64748B",
-
-  // Status (chaos red)
-  alert: "#EF4444",
+  whiteMute: "#CBD5E1",
+  gray: "#94A3B8",
+  graySoft: "#64748B",
 } as const;
 
 export const fonts = {

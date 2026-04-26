@@ -2,6 +2,7 @@ import React from "react";
 import {
   AbsoluteFill,
   Audio,
+  Img,
   Sequence,
   staticFile,
   interpolate,
@@ -63,6 +64,13 @@ export const LTCAIAdAudit15s: React.FC = () => {
         </Sequence>
       )}
 
+      {/* Permanent watermark - upper-right corner, all scenes.
+          Just below Meta's 250px top safe-zone reservation.
+          NOTE: requested asset public/ltc-logo.png is not in the repo —
+          using public/ltcai-logo.svg as a stand-in. Swap the staticFile()
+          target once the PNG is provided. */}
+      <Watermark />
+
       {/* Grain overlay - very subtle, ~3% */}
       <GrainOverlay intensity={0.025} />
 
@@ -72,6 +80,28 @@ export const LTCAIAdAudit15s: React.FC = () => {
       */}
       <Audio src={staticFile("voiceover.mp3")} volume={1} />
     </AbsoluteFill>
+  );
+};
+
+const Watermark: React.FC = () => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 270,
+        right: 50,
+        width: 230,
+        opacity: 0.78,
+        pointerEvents: "none",
+        filter: `drop-shadow(0 4px 18px ${brand.navyDeep}cc)`,
+        zIndex: 100,
+      }}
+    >
+      <Img
+        src={staticFile("ltcai-logo.svg")}
+        style={{ width: "100%", height: "auto", display: "block" }}
+      />
+    </div>
   );
 };
 

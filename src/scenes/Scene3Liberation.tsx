@@ -110,19 +110,21 @@ export const Scene3Liberation: React.FC = () => {
       >
         <KineticText
           text="Sans complexité."
-          startFrame={80}
+          startFrame={70}
           fontSize={86}
           weight={800}
           color={brand.white}
-          exit={{ startFrame: 116, mode: "rise" }}
+          exit={{ startFrame: 102, mode: "rise" }}
         />
         <div style={{ height: 18 }} />
         <KineticText
-          text="Sans jargon."
-          startFrame={120}
-          fontSize={86}
-          weight={800}
+          text="Avec des solutions à partir de 120€/mois"
+          startFrame={106}
+          staggerPerWord={3}
+          fontSize={54}
+          weight={700}
           color={brand.cyanLight}
+          letterSpacing={-1}
         />
       </div>
 

@@ -64,9 +64,8 @@ export const LTCAIAdAudit15s: React.FC = () => {
         </Sequence>
       )}
 
-      {/* Permanent watermark - upper-right corner, all scenes.
-          Just below Meta's 250px top safe-zone reservation.
-          NOTE: requested asset public/ltc-logo.png is not in the repo —
+      {/* Permanent watermark - upper-right corner, all scenes, 20px padding.
+          NOTE: requested asset public/ltc-logo.png is still not in the repo —
           using public/ltcai-logo.svg as a stand-in. Swap the staticFile()
           target once the PNG is provided. */}
       <Watermark />
@@ -88,12 +87,12 @@ const Watermark: React.FC = () => {
     <div
       style={{
         position: "absolute",
-        top: 270,
-        right: 50,
-        width: 230,
-        opacity: 0.78,
+        top: 20,
+        right: 20,
+        width: 200,
+        opacity: 0.85,
         pointerEvents: "none",
-        filter: `drop-shadow(0 4px 18px ${brand.navyDeep}cc)`,
+        filter: `drop-shadow(0 4px 14px ${brand.navyDeep}cc)`,
         zIndex: 100,
       }}
     >
